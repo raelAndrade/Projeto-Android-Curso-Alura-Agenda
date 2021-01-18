@@ -1,11 +1,14 @@
 package br.com.androidpro.agenda.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.Serializable;
 
 import br.com.androidpro.agenda.R;
 import br.com.androidpro.agenda.dao.AlunoDAO;
@@ -18,6 +21,7 @@ public class FormularioAlunoActivity extends AppCompatActivity {
     private EditText campoTelefone;
     private EditText campoEmail;
     private final AlunoDAO dao = new AlunoDAO();
+    private Aluno aluno;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,14 @@ public class FormularioAlunoActivity extends AppCompatActivity {
         // Pegar o dados digitado do formulário
         inicializacaoDosCampos();
         configuraBotaoSalvar();
+
+        // Para pegar a informação que foi enviada, existe a possibilidade de pegar a intent que foi enviada para ele através do método getIntent()
+        Intent dados = getIntent();
+        aluno = (Aluno) dados.getSerializableExtra("aluno");
+        campoNome.setText(aluno.getNome());
+        campoTelefone.setText(aluno.getTelefone());
+        campoEmail.setText(aluno.getEmail());
+
     }
 
     private void configuraBotaoSalvar() {
@@ -37,10 +49,13 @@ public class FormularioAlunoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Toast.makeText(FormularioAlunoActivity.this, "Cliquei no botão salvar", Toast.LENGTH_SHORT).show();
                 // Pega o conteúdo da cada EditText e atribui nas variáveis: nome, email e telefone
-                Aluno alunoCriado = criaAluno();
+                // Aluno alunoCriado = criaAluno();
                 // Toast.makeText(FormularioAlunoActivity.this, alunoCriado.getNome() + " - " + alunoCriado.getEmail() + " - " + alunoCriado.getTelefone(),Toast.LENGTH_SHORT).show();
                 // startActivity(new Intent(FormularioAlunoActivity.this, ListaAlunosActivity.class));
-                salva(alunoCriado);
+                // salva(alunoCriado);
+                prencheAluno();
+                dao.edita(aluno);
+                finish();
             }
         });
     }
@@ -56,11 +71,14 @@ public class FormularioAlunoActivity extends AppCompatActivity {
         finish();
     }
 
-    private Aluno criaAluno() {
+    private void prencheAluno() {
         String nome = campoNome.getText().toString();
         String email = campoTelefone.getText().toString();
         String telefone = campoEmail.getText().toString();
+        // return new Aluno(nome, telefone, email);
 
-        return new Aluno(nome, telefone, email);
+        aluno.setNome(nome);
+        aluno.setEmail(email);
+        aluno.setTelefone(telefone);
     }
 }

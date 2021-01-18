@@ -2,17 +2,23 @@ package br.com.androidpro.agenda.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+
 import br.com.androidpro.agenda.R;
 import br.com.androidpro.agenda.dao.AlunoDAO;
+import br.com.androidpro.agenda.model.Aluno;
 
 public class ListaAlunosActivity extends AppCompatActivity {
 
@@ -33,6 +39,10 @@ public class ListaAlunosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lista_alunos);
         setTitle(TITULO_APPBAR);
         configureFabNovoAluno();
+        dao.salva(new Aluno("Israel", "(11)2222-3333", "israel@gmail.com"));
+        dao.salva(new Aluno("Joyce", "(11)2222-3333", "joyce@gmail.com"));
+        dao.salva(new Aluno("Bianca", "(11)2222-3333", "bianca@gmail.com"));
+        dao.salva(new Aluno("Davi", "(11)2222-3333", "davi@gmail.com"));
 
         // List<String> alunos = new ArrayList<>(Arrays.asList("Joyce", "Bianca", "Davi", "Bingo", "Otávio", "Kevin", "Luna"));
         // TextView primeiroAluno = findViewById(R.id.textView1);
@@ -67,6 +77,22 @@ public class ListaAlunosActivity extends AppCompatActivity {
 
     private void configuraLista() {
         ListView listaDeAlunos = findViewById(R.id.activity_lista_alunos_listview);
-        listaDeAlunos.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dao.todos()));
+        final List<Aluno> alunos = dao.todos();
+        listaDeAlunos.setAdapter(new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                alunos));
+
+        listaDeAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Aluno alunoEscolhido = alunos.get(position);
+                // Log.i(">>>>>>>> Aluno:", "" + alunoEscolhido);
+                Intent vaiParaFormularioActivity = new Intent(ListaAlunosActivity.this, FormularioAlunoActivity.class);
+                // Tranferir dados para outras actitvity, a técnica de transferência via extra, exige que o dado seja serializável
+                vaiParaFormularioActivity.putExtra("aluno", alunoEscolhido);
+                startActivity(vaiParaFormularioActivity);
+            }
+        });
     }
 }
