@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- match_parent preencher toda a tela -->
+    <!-- O wrap_content tem a ideia de esticar o elemento com base no seu conteúdo, portanto, ele vai crescer o suficiente até aparecer o conteúdo da view. -->
+    <!-- dp - quantidade Densidade de Pixel (Medida fixa)  -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/activity_lista_alunos_fab_novo_aluno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:src="@drawable/ic_action_novo_aluno"
+        android:focusable="true" />
+
+    <ListView
+        android:id="@+id/activity_lista_alunos_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>
