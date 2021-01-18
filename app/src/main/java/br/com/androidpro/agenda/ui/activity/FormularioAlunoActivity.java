@@ -8,18 +8,21 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.Serializable;
-
 import br.com.androidpro.agenda.R;
 import br.com.androidpro.agenda.dao.AlunoDAO;
 import br.com.androidpro.agenda.model.Aluno;
 
+import static br.com.androidpro.agenda.ui.activity.ConstantesActivities.CHAVE_ALUNO;
+
 public class FormularioAlunoActivity extends AppCompatActivity {
 
-    public static final String TITULO_APPBAR = "Novo aluno";
+    private static final String TITULO_APPBAR_NOVO_ALUNO = "Novo aluno";
+    private static final String TITULO_APPBAR_EDITA_ALUNO = "Edita aluno";
+
     private EditText campoNome;
     private EditText campoTelefone;
     private EditText campoEmail;
+
     private final AlunoDAO dao = new AlunoDAO();
     private Aluno aluno;
 
@@ -27,18 +30,31 @@ public class FormularioAlunoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_aluno);
-        setTitle(TITULO_APPBAR);
+
         // Pegar o dados digitado do formulário
         inicializacaoDosCampos();
         configuraBotaoSalvar();
 
+        carregaAluno();
+    }
+
+    private void carregaAluno() {
         // Para pegar a informação que foi enviada, existe a possibilidade de pegar a intent que foi enviada para ele através do método getIntent()
         Intent dados = getIntent();
-        aluno = (Aluno) dados.getSerializableExtra("aluno");
+        if(dados.hasExtra(CHAVE_ALUNO)){
+            setTitle(TITULO_APPBAR_EDITA_ALUNO);
+            aluno = (Aluno) dados.getSerializableExtra(CHAVE_ALUNO);
+            preencheCampos();
+        }else{
+            setTitle(TITULO_APPBAR_NOVO_ALUNO);
+            aluno = new Aluno();
+        }
+    }
+
+    private void preencheCampos() {
         campoNome.setText(aluno.getNome());
         campoTelefone.setText(aluno.getTelefone());
         campoEmail.setText(aluno.getEmail());
-
     }
 
     private void configuraBotaoSalvar() {
@@ -47,22 +63,25 @@ public class FormularioAlunoActivity extends AppCompatActivity {
         botaoSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prencheAluno();
-                dao.edita(aluno);
-                finish();
+                finalizaFormulario();
             }
         });
+    }
+
+    private void finalizaFormulario() {
+        prencheAluno();
+        if(aluno.temIdValido()){
+            dao.edita(aluno);
+        }else{
+            dao.salva(aluno);
+        }
+        finish();
     }
 
     private void inicializacaoDosCampos() {
         campoNome = findViewById(R.id.activity_formulario_aluno_nome);
         campoTelefone = findViewById(R.id.activity_formulario_aluno_telefone);
         campoEmail = findViewById(R.id.activity_formulario_aluno_email);
-    }
-
-    private void salva(Aluno aluno) {
-        dao.salva(aluno);
-        finish();
     }
 
     private void prencheAluno() {
