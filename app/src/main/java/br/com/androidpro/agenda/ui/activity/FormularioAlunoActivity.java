@@ -47,12 +47,6 @@ public class FormularioAlunoActivity extends AppCompatActivity {
         botaoSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Toast.makeText(FormularioAlunoActivity.this, "Cliquei no botão salvar", Toast.LENGTH_SHORT).show();
-                // Pega o conteúdo da cada EditText e atribui nas variáveis: nome, email e telefone
-                // Aluno alunoCriado = criaAluno();
-                // Toast.makeText(FormularioAlunoActivity.this, alunoCriado.getNome() + " - " + alunoCriado.getEmail() + " - " + alunoCriado.getTelefone(),Toast.LENGTH_SHORT).show();
-                // startActivity(new Intent(FormularioAlunoActivity.this, ListaAlunosActivity.class));
-                // salva(alunoCriado);
                 prencheAluno();
                 dao.edita(aluno);
                 finish();
@@ -75,7 +69,6 @@ public class FormularioAlunoActivity extends AppCompatActivity {
         String nome = campoNome.getText().toString();
         String email = campoTelefone.getText().toString();
         String telefone = campoEmail.getText().toString();
-        // return new Aluno(nome, telefone, email);
 
         aluno.setNome(nome);
         aluno.setEmail(email);

@@ -32,10 +32,6 @@ public class ListaAlunosActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Toast.makeText(this, "Israel Andrade", Toast.LENGTH_LONG).show();
-        // TextView aluno = new TextView(this);
-        // aluno.setText("Israel Andrade");
-
         setContentView(R.layout.activity_lista_alunos);
         setTitle(TITULO_APPBAR);
         configureFabNovoAluno();
@@ -43,16 +39,6 @@ public class ListaAlunosActivity extends AppCompatActivity {
         dao.salva(new Aluno("Joyce", "(11)2222-3333", "joyce@gmail.com"));
         dao.salva(new Aluno("Bianca", "(11)2222-3333", "bianca@gmail.com"));
         dao.salva(new Aluno("Davi", "(11)2222-3333", "davi@gmail.com"));
-
-        // List<String> alunos = new ArrayList<>(Arrays.asList("Joyce", "Bianca", "Davi", "Bingo", "Otávio", "Kevin", "Luna"));
-        // TextView primeiroAluno = findViewById(R.id.textView1);
-        // TextView segundoAluno = findViewById(R.id.textView2);
-        // TextView terceiroAluno = findViewById(R.id.textView3);
-        // primeiroAluno.setText(alunos.get(0));
-        // segundoAluno.setText(alunos.get(1));
-        // terceiroAluno.setText(alunos.get(2));
-
-        // listaDeAlunos.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, alunos));
     }
 
     private void configureFabNovoAluno() {
