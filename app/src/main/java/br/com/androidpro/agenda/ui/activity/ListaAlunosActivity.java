@@ -1,5 +1,8 @@
 package br.com.androidpro.agenda.ui.activity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -34,15 +37,12 @@ public class ListaAlunosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_lista_alunos);
         setTitle(TITULO_APPBAR);
         configureFabNovoAluno();
         configuraLista();
-        dao.salva(new Aluno("Israel", "(11)2222-3333", "israel@gmail.com"));
-        dao.salva(new Aluno("Joyce", "(11)2222-3333", "joyce@gmail.com"));
-        dao.salva(new Aluno("Bianca", "(11)2222-3333", "bianca@gmail.com"));
-        dao.salva(new Aluno("Davi", "(11)2222-3333", "davi@gmail.com"));
+
+
     }
 
     @Override
@@ -55,23 +55,38 @@ public class ListaAlunosActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
+    public boolean onContextItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         // CharSequence tituloDoMenu = item.getTitle();
         // if(tituloDoMenu.equals("Remover")){
         if(itemId == R.id.activity_lista_alunos_menu_remover){
-            // Convertendo o MenuInfo via cast para AdapterView.AdapterContextMenuInfo, que considerando que as informações do menu está
-            // relacionado ao AdapterView.
-            AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-            // Com essa nova referência acesse a posição do elemento a partir do atributo position, e então, pegue o aluno a partir do método
-            // getItem() do adapter.
-            Aluno alunoEscolhido = adapter.getItem(menuInfo.position);
-
-            // Em seguida chame o método remove() enviando o aluno que foi selecionado
-            remove(alunoEscolhido);
+            confirmaRemocao(item);
         }
         return super.onContextItemSelected(item);
+    }
+
+    private void confirmaRemocao(final MenuItem item) {
+        new AlertDialog
+                .Builder(this)
+                .setTitle("Removendo aluno")
+                .setMessage("Tem certeza que quer remover o aluno?")
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Convertendo o MenuInfo via cast para AdapterView.AdapterContextMenuInfo, que considerando que as informações do menu está
+                        // relacionado ao AdapterView.
+                        AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+                        // Com essa nova referência acesse a posição do elemento a partir do atributo position, e então, pegue o aluno a partir do método
+                        // getItem() do adapter.
+                        Aluno alunoEscolhido = adapter.getItem(menuInfo.position);
+
+                        // Em seguida chame o método remove() enviando o aluno que foi selecionado
+                        remove(alunoEscolhido);
+                    }
+                })
+                .setNegativeButton("Não", null)
+                .show();
     }
 
     private void configureFabNovoAluno() {
