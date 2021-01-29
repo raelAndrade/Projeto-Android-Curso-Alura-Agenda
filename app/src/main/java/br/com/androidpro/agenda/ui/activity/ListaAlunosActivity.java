@@ -2,12 +2,10 @@ package br.com.androidpro.agenda.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -16,11 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
-
 import br.com.androidpro.agenda.R;
 import br.com.androidpro.agenda.dao.AlunoDAO;
 import br.com.androidpro.agenda.model.Aluno;
+import br.com.androidpro.agenda.ui.adapter.ListaAlunosAdapter;
 
 import static br.com.androidpro.agenda.ui.activity.ConstantesActivities.CHAVE_ALUNO;
 
@@ -28,7 +25,8 @@ public class ListaAlunosActivity extends AppCompatActivity {
 
     public static final String TITULO_APPBAR = "Lista de Alunos";
     private final AlunoDAO dao = new AlunoDAO();
-    private ArrayAdapter<Aluno> adapter; // Componente responsável por manter e atualização dos dados
+    private ListaAlunosAdapter adapter;
+    // private ArrayAdapter<Aluno> adapter; // Componente responsável por manter e atualização dos dados
 
     /* Para adicionar comportamentos nas Activities, exploramos o conceito de ciclo
     * de vida da Activity que é a forma na qual somos capazes de modificar os comportamentos
@@ -97,8 +95,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
     }
 
     private void atualizaAlunos() {
-        adapter.clear();
-        adapter.addAll(dao.todos());
+        adapter.atualiza(dao.todos());
     }
 
     private void configuraLista() {
@@ -132,9 +129,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
     }
 
     private void configuraAdapter(ListView listaDeAlunos) {
-        adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1);
+        adapter = new ListaAlunosAdapter(this);
         listaDeAlunos.setAdapter(adapter);
     }
 }
